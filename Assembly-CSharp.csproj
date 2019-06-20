@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{44267BCF-459C-D8A9-AF56-8F3C6FAFE72E}</ProjectGuid>
+    <ProjectGuid>{1417F1A2-685E-B2DB-7F96-FD916B68C914}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -64,40 +64,40 @@
     <Compile Include="Assets\Scripts\PlaceBlocks.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ugui">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.ugui.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.ugui.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ugui.Editor">
-      <HintPath>C:/Users/dash2/Documents/GitHub/VertScroll/VertScroll/Library/ScriptAssemblies/Unity.ugui.Editor.dll</HintPath>
+      <HintPath>C:/Users/dash2/Documents/GitHub/RandomsScroller/Library/ScriptAssemblies/Unity.ugui.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0a5/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
