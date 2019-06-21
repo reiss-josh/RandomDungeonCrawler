@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        speed = 5;
+        speed = 6.5f;
         rb2d = GetComponent<Rigidbody2D>();
     }
     // Update is called once per frame

@@ -6,8 +6,8 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform LookAt;
 
-    public float boundX = 2.0f;
-    public float boundY = 1.5f;
+    public float boundX = 4.0f;
+    public float boundY = 2.0f;
 
     private void LateUpdate()
     {
