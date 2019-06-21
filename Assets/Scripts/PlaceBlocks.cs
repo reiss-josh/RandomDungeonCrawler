@@ -10,6 +10,8 @@ public class PlaceBlocks : MonoBehaviour
     public Tile emptyTile;
     public Tilemap emptyMap;
     public Tilemap wallMap;
+    public GameObject spawnGuy;
+    public int totalEnemies;
 
     //NEED TO ADD A CHECK TO DECREASE ROOM SIZE UNTIL FITS
     int chooseRoomSize(Vector2Int Offset, int lowerBound, int upperBound)
@@ -59,6 +61,12 @@ public class PlaceBlocks : MonoBehaviour
         int noiseOffset = Random.Range(0, passedSize - roomSize) * noiseDirection;
         xyOffset.x += (roomSize * xyCorner.x) + (noiseOffset * xyCorner.y);
         xyOffset.y += (roomSize * xyCorner.y) + (noiseOffset * xyCorner.x);
+
+        if (totalEnemies > 0)
+        {
+            Instantiate(spawnGuy, new Vector3(xyOffset.x, xyOffset.y, 0), Quaternion.identity);
+            totalEnemies--;
+        }
 
         //make wall outline
         for (int j = -1; j < 2; j += 2)
@@ -175,6 +183,7 @@ public class PlaceBlocks : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        totalEnemies = 10;
         //init starting platform
         for (int i = -2; i < 2; i++)
         {
