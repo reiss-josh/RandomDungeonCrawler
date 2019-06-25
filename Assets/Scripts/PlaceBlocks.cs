@@ -13,23 +13,29 @@ public class PlaceBlocks : MonoBehaviour
     public GameObject spawnGuy;
     public int totalEnemies;
 
-    Vector3Int RoomGenerator(Vector3Int xySize, Vector2Int xyCorner, int lowerBound, int upperBound)
+    //to-do
+    //  fix noiseOffset, because it depends on square room sizes
+    //  fix corners
+    //  fix doors
+    List<Vector2Int> RoomGenerator(Vector2Int xyOffset, Vector2Int xyCorner, Vector2Int sizeBoundary, Vector2Int xySizes)
     {
-        Vector2Int xyOffset = new Vector2Int(xySize.x, xySize.y); //this variable acts as a holder for our room's origin
-        int passedSize = xySize.z;
-        xyOffset.x += (passedSize * xyCorner.x) + (1 * xyCorner.x);
-        xyOffset.y += (passedSize * xyCorner.y) + (1 * xyCorner.y);
-        int roomSize = Random.Range(lowerBound, upperBound); ; //here, we randomly select our room size.
-        if (roomSize < 0)
-            return new Vector3Int(0, 0, -1);
+        int passedSize = xySizes.x;
+        xyOffset.x += (xySizes.x * xyCorner.x) + (1 * xyCorner.x);
+        xyOffset.y += (xySizes.y * xyCorner.y) + (1 * xyCorner.y);
+        int roomSize = Random.Range(sizeBoundary.x, sizeBoundary.y); //here, we randomly select our room size.
+        Vector2Int xyRoomSize = new Vector2Int(Random.Range(sizeBoundary.x, sizeBoundary.y), Random.Range(sizeBoundary.x, sizeBoundary.y));
+        //Vector2Int xyRoomSize = new Vector2Int(roomSize, roomSize);
+        if ((xyRoomSize.x < 0) || (xyRoomSize.y < 0))
+            return new List<Vector2Int> { new Vector2Int(0, 0), new Vector2Int(0, 0) };
         int noiseDirection = Random.Range(-10, 10); //the noiseX variables add variation to room placement
         if (noiseDirection < 0)
             noiseDirection = -1;
         if (noiseDirection > 0)
             noiseDirection = 1;
-        int noiseOffset = Random.Range(0, passedSize - roomSize) * noiseDirection;
-        xyOffset.x += (roomSize * xyCorner.x) + (noiseOffset * xyCorner.y);
-        xyOffset.y += (roomSize * xyCorner.y) + (noiseOffset * xyCorner.x);
+        int noiseOffset = Random.Range(0, passedSize - roomSize) * noiseDirection; //currently broken
+        noiseOffset = 0; //debug line
+        xyOffset.x += (xyRoomSize.x * xyCorner.x) + (noiseOffset * xyCorner.y);
+        xyOffset.y += (xyRoomSize.y * xyCorner.y) + (noiseOffset * xyCorner.x);
 
         if (totalEnemies > 0)
         {
@@ -40,28 +46,23 @@ public class PlaceBlocks : MonoBehaviour
         //make wall outline
         for (int j = -1; j < 2; j += 2)
         {
-            for (int i = -roomSize; i < roomSize; i++)
+            for (int i = -xyRoomSize.x; i < xyRoomSize.x; i++)
+            {
+                Vector3Int pos;
+                //top/bottom tiles
+                pos = new Vector3Int(i + xyOffset.x, j * xyRoomSize.y + (j == -1 ? -1 : 0) + xyOffset.y, 0);
+                if ((wallMap.GetTile(pos) == null) && (emptyMap.GetTile(pos) == null))
+                    { wallMap.SetTile(pos, wallTile); }
+            }
+            for(int i = -xyRoomSize.y; i < xyRoomSize.y; i++)
             {
                 Vector3Int pos;
                 //side tiles
-                pos = new Vector3Int(j * roomSize + (j == -1 ? -1 : 0) + xyOffset.x, i + xyOffset.y, 0);
+                pos = new Vector3Int(j * xyRoomSize.x + (j == -1 ? -1 : 0) + xyOffset.x, i + xyOffset.y, 0);
                 if ((wallMap.GetTile(pos) == null) && (emptyMap.GetTile(pos) == null))
-                    { wallMap.SetTile(pos, wallTile); }
-
-                //top/bottom tiles
-                pos = new Vector3Int(i + xyOffset.x, j * roomSize + (j == -1 ? -1 : 0) + xyOffset.y, 0);
-                if ((wallMap.GetTile(pos) == null) && (emptyMap.GetTile(pos) == null))
-                    { wallMap.SetTile(pos, wallTile); }
-
-                //middle tiles
-                for (int c = 0; c < roomSize; c++)
-                {
-                    pos.y -= (j);
-                    emptyMap.SetTile(pos, emptyTile);
-                    if (wallMap.GetTile(pos) != null)
-                        wallMap.SetTile(pos, null);
-                }
+                { wallMap.SetTile(pos, wallTile); }
             }
+            /*
             //corners
             for (int i = -1; i < 2; i += 2)
             {
@@ -69,11 +70,21 @@ public class PlaceBlocks : MonoBehaviour
                                                     xyOffset.y + (roomSize * i) - (i == -1 ? 1 : 0), 0);
                 if((wallMap.GetTile(cornerVec) == null) && (emptyMap.GetTile(cornerVec) == null))
                     wallMap.SetTile(cornerVec, wallTile2);
+            }*/
+        }
+        for(int i = -xyRoomSize.x; i < xyRoomSize.x; i++)
+        {
+            for(int j = -xyRoomSize.y; j < xyRoomSize.y; j++)
+            {
+                Vector3Int pos = new Vector3Int(xyOffset.x + i, xyOffset.y + j, 0);
+                emptyMap.SetTile(pos, emptyTile);
+                if (wallMap.GetTile(pos) != null)
+                    wallMap.SetTile(pos, null);
             }
         }
         //make Door
         int doorLoc;
-        if (xyCorner.x != 0)
+        if (xyCorner.x != 0) //if we have a horizontally placed room
         {
             int xOffset = xyOffset.x - (xyCorner.x * roomSize) - ((xyCorner.x == 1) ? 1 : 0);
             int yLower = 0;
@@ -102,7 +113,7 @@ public class PlaceBlocks : MonoBehaviour
             wallMap.SetTile(doorVec, null);
             //make doors bigger than 1 sometimes
         }
-        else if (xyCorner.y != 0)
+        else if (xyCorner.y != 0) //if we have a vertically placed room
         {
             int yOffset = xyOffset.y - (xyCorner.y * roomSize) - ((xyCorner.y == 1) ? 1 : 0);
             int xLower = 0;
@@ -129,11 +140,10 @@ public class PlaceBlocks : MonoBehaviour
             doorLoc = Random.Range(xLower, xUpper);
             wallMap.SetTile(new Vector3Int(doorLoc, yOffset, 0), null);
         }
-
-        return new Vector3Int(xyOffset.x, xyOffset.y, roomSize);
+        return new List<Vector2Int> {xyOffset, xyRoomSize};
     }
 
-    void worldGenerator(Vector3Int xySize, int lowerBound, int UpperBound, int totalRooms)
+    void worldGenerator(Vector2Int xyOffset, Vector2Int sizeBoundary, Vector2Int xySize, int totalRooms)
     {
         Vector2Int lastDir = new Vector2Int(0, 0);
         Vector2Int randomDir = new Vector2Int(0, 0);
@@ -152,7 +162,9 @@ public class PlaceBlocks : MonoBehaviour
                 }
                 attempts++;
             }
-            xySize = RoomGenerator(xySize, randomDir, lowerBound, UpperBound);
+            List<Vector2Int> funcOutput = RoomGenerator(xyOffset, randomDir, sizeBoundary, xySize);
+            xyOffset = funcOutput[0];
+            xySize = funcOutput[1];
             randomDir *= -1;
             lastDir = randomDir;
             totalRooms--;
@@ -170,9 +182,9 @@ public class PlaceBlocks : MonoBehaviour
             wallMap.SetTile(pos, wallTile);
         }
         //generate map border
-        Vector3Int savedData = RoomGenerator(new Vector3Int(0, 0, 0), new Vector2Int(0, 0), 5, 5);
+        List<Vector2Int> savedData = RoomGenerator(new Vector2Int(0, 0), new Vector2Int(0, 0), new Vector2Int(5, 5), new Vector2Int(0,0));
 
-        worldGenerator(savedData, 2, 12, 50);
+        worldGenerator(savedData[0], new Vector2Int(2, 12), savedData[1], 50);
         /*
         Vector3Int tempSave = RoomGenerator(new Vector3Int(0,0, savedData.z), new Vector2Int(0, 1), 3, 5);
         RoomGenerator(tempSave, new Vector2Int(-1, 0), 3, 5);
