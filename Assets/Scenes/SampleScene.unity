@@ -301,7 +301,10 @@ MonoBehaviour:
   emptyMap: {fileID: 1329415881}
   wallMap: {fileID: 1676991238}
   spawnGuy: {fileID: 150753272}
+  playerTf: {fileID: 836268045}
+  maxEnemies: 0
   totalEnemies: 0
+  totalRooms: 0
 --- !u!4 &836268045 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5822830723764655807, guid: 4d8e7ab755bb285428c38cf2de135368,
@@ -377,7 +380,6 @@ TilemapRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -487,7 +489,6 @@ TilemapRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -591,6 +592,11 @@ PrefabInstance:
     - target: {fileID: 7893707429786127424, guid: 7ba8fad0159969b45b528d9551cccc2a,
         type: 3}
       propertyPath: m_Name
+      value: BasicGuy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7893707429786127424, guid: 7ba8fad0159969b45b528d9551cccc2a,
+        type: 3}
+      propertyPath: m_TagString
       value: BasicGuy
       objectReference: {fileID: 0}
     - target: {fileID: 9197168636770256335, guid: 7ba8fad0159969b45b528d9551cccc2a,
@@ -730,6 +736,11 @@ PrefabInstance:
     - target: {fileID: 5822830723764655806, guid: 4d8e7ab755bb285428c38cf2de135368,
         type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5822830723764655806, guid: 4d8e7ab755bb285428c38cf2de135368,
+        type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5822830723764655804, guid: 4d8e7ab755bb285428c38cf2de135368,
