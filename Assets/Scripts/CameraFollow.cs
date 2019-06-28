@@ -9,8 +9,19 @@ public class CameraFollow : MonoBehaviour
     public float boundX = 4.0f;
     public float boundY = 2.0f;
 
+    private Camera m_OrthographicCamera;
+
+    private void Start()
+    {
+        m_OrthographicCamera = GetComponent<Camera>();
+    }
     private void LateUpdate()
     {
+        float cameraScroll = Input.GetAxisRaw("MouseScrollWheel");
+        if (cameraScroll > 0)
+            m_OrthographicCamera.orthographicSize -= 0.5f;
+        if (cameraScroll < 0)
+            m_OrthographicCamera.orthographicSize += 0.5f;
         Vector3 delta = Vector3.zero;
 
         float dx = LookAt.position.x - transform.position.x;
