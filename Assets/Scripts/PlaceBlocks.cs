@@ -13,8 +13,35 @@ public class PlaceBlocks : MonoBehaviour
     public Transform playerTf;
     public long totalRooms;
 
-    //to-do
-    //  make rooms actually have things in them
+    // Start is called before the first frame update
+    void Start()
+    {
+        totalRooms = 50;
+        worldGeneratorHelper(0, 0);
+    }
+
+    void Update()
+    {
+        //reset map on press
+        bool keyReset = Input.GetButtonDown("Fire2");
+        if (keyReset)
+        {
+            Vector3Int playerTileCoord = emptyMap.WorldToCell(playerTf.position);
+            emptyMap.ClearAllTiles();
+            wallMap.ClearAllTiles();
+
+            worldGeneratorHelper(playerTileCoord.x, playerTileCoord.y);
+        }
+        //remove blocks on click
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int gridPos = wallMap.WorldToCell(clickPos);
+            RemoveBlock(gridPos);
+        }
+    }
+    
+    //generate a room of size within sizeBoundary, in direction xyCorner, starting from room at xyOffset of size xySizes
     List<Vector2Int> RoomGenerator(Vector2Int xyOffset, Vector2Int xyCorner, Vector2Int sizeBoundary, Vector2Int xySizes)
     {
         //init basic variables
@@ -41,17 +68,17 @@ public class PlaceBlocks : MonoBehaviour
         //make wall outline
         for (int j = -1; j < 2; j += 2)
         {
+            //top/bottom tiles
             for (int i = -xyRoomSize.x; i < xyRoomSize.x; i++)
             {
                 Vector3Int pos;
-                //top/bottom tiles
                 pos = new Vector3Int(i + xyOffset.x, j * xyRoomSize.y + (j == -1 ? -1 : 0) + xyOffset.y, 0);
                 PlaceTileIfEmpty(pos, wallTile);
             }
+            //side tiles
             for (int i = -xyRoomSize.y; i < xyRoomSize.y; i++)
             {
                 Vector3Int pos;
-                //side tiles
                 pos = new Vector3Int(j * xyRoomSize.x + (j == -1 ? -1 : 0) + xyOffset.x, i + xyOffset.y, 0);
                 PlaceTileIfEmpty(pos, wallTile);
             }
@@ -60,10 +87,11 @@ public class PlaceBlocks : MonoBehaviour
             for (int i = -1; i < 2; i += 2)
             {
                 Vector3Int cornerVec = new Vector3Int(xyOffset.x + (xyRoomSize.x * j) - (j == -1 ? 1 : 0),
-                                                    xyOffset.y + (xyRoomSize.y * i) - (i == -1 ? 1 : 0), 0);
+                                                      xyOffset.y + (xyRoomSize.y * i) - (i == -1 ? 1 : 0), 0);
                 PlaceTileIfEmpty(cornerVec, wallTile2);
             }
         }
+        //place center tiles
         for (int i = -xyRoomSize.x; i < xyRoomSize.x; i++)
         {
             for (int j = -xyRoomSize.y; j < xyRoomSize.y; j++)
@@ -78,6 +106,7 @@ public class PlaceBlocks : MonoBehaviour
         int doorLoc;
         if (xyCorner.x != 0) //if we have a horizontally placed room
         {
+            //check where a door can fit
             int xOffset = xyOffset.x - (xyCorner.x * xyRoomSize.x) - ((xyCorner.x == 1) ? 1 : 0);
             int yLower = 0;
             int yUpper = 0;
@@ -100,10 +129,12 @@ public class PlaceBlocks : MonoBehaviour
                         i = xyOffset.y + xyRoomSize.y;
                 }
             }
+            //now that we have the range of viable door places, pick one
             doorLoc = Random.Range(yLower, yUpper + 1);
             Vector3Int doorVec = new Vector3Int(xOffset, doorLoc, 0);
             wallMap.SetTile(doorVec, null);
             emptyMap.SetTile(doorVec, emptyTile);
+            //widen the door if we can
             int spareRoomDown = doorLoc - yLower;
             int spareRoomUp = yUpper - doorLoc;
             if ((spareRoomDown > 1) && (spareRoomUp > 1))
@@ -124,6 +155,7 @@ public class PlaceBlocks : MonoBehaviour
         }
         else if (xyCorner.y != 0) //if we have a vertically placed room
         {
+            //check where a door can fit
             int yOffset = xyOffset.y - (xyCorner.y * xyRoomSize.y) - ((xyCorner.y == 1) ? 1 : 0);
             int xLower = 0;
             int xUpper = 0;
@@ -146,10 +178,12 @@ public class PlaceBlocks : MonoBehaviour
                         i = xyOffset.x + xyRoomSize.x;
                 }
             }
+            //pick a door space within the range we found
             doorLoc = Random.Range(xLower, xUpper + 1);
             Vector3Int doorVec = new Vector3Int(doorLoc, yOffset, 0);
             wallMap.SetTile(doorVec, null);
             emptyMap.SetTile(doorVec, emptyTile);
+            //widen the door if we can
             int spareRoomLeft = doorLoc - xLower;
             int spareRoomRight = xUpper - doorLoc;
             if ((spareRoomLeft > 1) && (spareRoomRight > 1))
@@ -170,7 +204,8 @@ public class PlaceBlocks : MonoBehaviour
         }
         return new List<Vector2Int> { xyOffset, xyRoomSize };
     }
-
+    
+    //generates totalRooms rooms of sizes within range sizeBoundary starting from room at xyOffset of size xySize
     void worldGenerator(Vector2Int xyOffset, Vector2Int sizeBoundary, Vector2Int xySize, long totalRooms)
     {
         Vector2Int lastDir = new Vector2Int(0, 0);
@@ -201,6 +236,7 @@ public class PlaceBlocks : MonoBehaviour
         }
     }
 
+    //take a starting x,y and generate lots of rooms
     void worldGeneratorHelper(int xOffset, int yOffset)
     {
         //generate starting room
@@ -209,38 +245,11 @@ public class PlaceBlocks : MonoBehaviour
         worldGenerator(savedData[0], new Vector2Int(2, 6), savedData[1], totalRooms);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        totalRooms = 50;
-        worldGeneratorHelper(0, 0);
-    }
-
-    void Update()
-    {
-        bool keyReset = Input.GetButtonDown("Fire2");
-        if (keyReset)
-        {
-            Vector3Int playerTileCoord = emptyMap.WorldToCell(playerTf.position);
-            emptyMap.ClearAllTiles();
-            wallMap.ClearAllTiles();
-
-            worldGeneratorHelper(playerTileCoord.x, playerTileCoord.y);
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 clickPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int gridPos = wallMap.WorldToCell(clickPos);
-            RemoveBlock(gridPos);
-        }
-    }
-
+    //get room count from text box
     public void receiveRoomCount(string roomCount)
-    {
-        totalRooms = long.Parse(roomCount);
-    }
-
+        {totalRooms = long.Parse(roomCount);}
+    
+    //place given tile at given location if that space is open
     public bool PlaceTileIfEmpty(Vector3Int chosenPos, Tile chosenTile)
     {
         if ((wallMap.GetTile(chosenPos) == null) && (emptyMap.GetTile(chosenPos) == null))
@@ -252,6 +261,7 @@ public class PlaceBlocks : MonoBehaviour
             return false;
     }
 
+    //remove clicked block, but make sure there is no opening to void
     public void RemoveBlock(Vector3Int blockPos)
     {
         if (wallMap.GetTile(blockPos) != null)

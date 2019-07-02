@@ -8,9 +8,7 @@ public class DisplaySliderValue : MonoBehaviour
     Text textComponent;
 
     void Start()
-    {
-        textComponent = GetComponent<Text>();
-    }
+        {textComponent = GetComponent<Text>();}
 
     public void SetSliderValue(float sliderValue)
     {

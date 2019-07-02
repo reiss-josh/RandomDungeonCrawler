@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     private float move, vMove;
     private bool keyJump, keyShoot;
     public float speed;
-
     private Rigidbody2D rb2d;
 
     // Start is called before the first frame update
